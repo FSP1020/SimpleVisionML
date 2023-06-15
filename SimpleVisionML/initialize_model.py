@@ -72,5 +72,7 @@ class SimpleModel:
         self.recognition_network = recognition_network
 
         if detection:
-            detection_model = load_detection_model(task, detection_network)
+            detection_model = load_detection_model(task, detection_network, verbose)
+        if recognition:
+            recognition_model = load_recognition_model(task, recognition_network, verbose)
 
