@@ -2,7 +2,7 @@ from cfg.model_dict import *
 from tasks.text_detection.models.base_detection_model import DETECTION_MODELS
 from tasks.text_recognition.models.base_recognition_model import RECOGNITION_MODELS
 
-def load_detection_model(task, detection_network, verbose):
+def load_detection_model(task, detection_network, device, verbose):
     """
     Load a detection model
 
@@ -24,7 +24,7 @@ def load_detection_model(task, detection_network, verbose):
     else:
         raise NotImplementedError
     
-    detection_model = DETECTION_MODELS[detection_network](model_info)
+    detection_model = DETECTION_MODELS[detection_network](detection_network, model_info, device)
 
     return detection_model
     
