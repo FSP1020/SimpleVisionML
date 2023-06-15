@@ -44,9 +44,7 @@ def get_model_init_args():
     )
     parser.add_argument(
         "--recognition",
-        type=bool,
-        choices=[True, False],
-        default=True,
+        action="store_true",
         help="Use text recognition",
     )
     parser.add_argument(

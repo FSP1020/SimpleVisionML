@@ -1,3 +1,5 @@
+# Placeholder
+PARSEQ = None
 RECOGNITION_MODELS = {'parseq': PARSEQ}
 
 class RecognitionModel:

@@ -17,7 +17,7 @@ LOGGER = getLogger(__name__)
 
 class SimpleModel:
     def __init__(self, use_gpu=True, device=None, model_storage_directory=None, task="text", detection=True, 
-                 detection_network='craft', recognition=True, recognition_network='parseq',
+                 detection_network='craft', recognition=False, recognition_network='parseq',
                  verbose=False):
         """Create a SimpleModel
 
@@ -34,12 +34,15 @@ class SimpleModel:
             detection (bool): Choose to do detection on text (default=True)
             detection_network (str): Choose detection network to use (default=craft)
 
-            recognition (bool): Choose to do recognition on text (default=True)
+            recognition (bool): Choose to do recognition on text (default=False)
             recognition_network (str): Choose recognition network to use (defualt=parseq)
 
             verbose (bool): Show errors and debugging info (default=False)
         """
         self.verbose = verbose
+
+        if verbose:
+            print(recognition)
 
         if use_gpu:
             # Check to see if CUDA is available
@@ -75,4 +78,6 @@ class SimpleModel:
             detection_model = load_detection_model(task, detection_network, self.device, verbose)
         if recognition:
             recognition_model = load_recognition_model(task, recognition_network, verbose)
+
+        print(detection_model)
 

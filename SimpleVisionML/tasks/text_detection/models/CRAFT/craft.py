@@ -8,6 +8,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+import sys
+sys.path.append('tasks/text_detection/models/CRAFT')
 from basenet.vgg16_bn import vgg16_bn, init_weights
 
 class double_conv(nn.Module):
