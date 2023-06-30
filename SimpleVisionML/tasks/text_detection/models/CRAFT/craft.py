@@ -9,8 +9,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import sys
-sys.path.append('tasks/text_detection/models/CRAFT')
-from basenet.vgg16_bn import vgg16_bn, init_weights
+from tasks.text_detection.models.CRAFT.basenet.vgg16_bn import vgg16_bn, init_weights
 
 class double_conv(nn.Module):
     def __init__(self, in_ch, mid_ch, out_ch):
@@ -82,6 +81,6 @@ class CRAFT(nn.Module):
         return y.permute(0,2,3,1), feature
 
 if __name__ == '__main__':
-    model = CRAFT(pretrained=True).cuda()
-    output, _ = model(torch.randn(1, 3, 768, 768).cuda())
+    model = CRAFT(pretrained=True).to("mps")
+    output, _ = model(torch.randn(1, 3, 768, 768).to("mps"))
     print(output.shape)

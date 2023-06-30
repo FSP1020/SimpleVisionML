@@ -8,6 +8,11 @@ import sys
 # Import other local modules (other files in this package)
 from utils.load_model import *
 from utils.cfg.model_dict import *
+from tasks.text_detection.models.CRAFT.imgproc import *
+from tasks.text_detection.models.CRAFT.craft_utils import *
+from tasks.text_detection.models.CRAFT.imgproc import loadImage
+from tasks.text_detection.models.CRAFT.main import test_net
+import tasks.text_detection.models.CRAFT.file_utils as file_utils 
 
 # Import logging functionality
 from logging import getLogger
@@ -41,9 +46,6 @@ class SimpleModel:
         """
         self.verbose = verbose
 
-        if verbose:
-            print(recognition)
-
         if use_gpu:
             # Check to see if CUDA is available
             if torch.cuda.is_available() and device not in ['cpu', 'mps']:
@@ -75,9 +77,14 @@ class SimpleModel:
         self.recognition_network = recognition_network
 
         if detection:
-            detection_model = load_detection_model(task, detection_network, self.device, verbose)
+            self.detection_model = load_detection_model(task, detection_network, self.device, verbose)
         if recognition:
-            recognition_model = load_recognition_model(task, recognition_network, verbose)
+            self.recognition_model = load_recognition_model(task, recognition_network, verbose)
 
-        print(detection_model)
+        print(self.detection_model)
 
+    def processFile(self, file):
+        if self.detection:
+            bboxes = self.detection_model.process_file(self.detection_model.model, self.device, file)
+
+        return bboxes

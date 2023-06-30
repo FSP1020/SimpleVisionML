@@ -1,4 +1,6 @@
 from .CRAFT.craft import CRAFT
+from tasks.text_detection.models.CRAFT.main import copyStateDict
+import torch
 
 DETECTION_MODELS = {'craft': CRAFT}
 
@@ -13,6 +15,10 @@ class DetectionModel:
 
         detection_model = DETECTION_MODELS[detection_network]().to(device)
 
+        detection_model.load_state_dict(copyStateDict(torch.load(self.weights_path,  map_location='cpu')))
+
         detection_model.eval()
 
         self.model = detection_model
+
+        self.process_file = model_info["process_file"]

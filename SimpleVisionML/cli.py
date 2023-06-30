@@ -39,7 +39,7 @@ def get_model_init_args():
     parser.add_argument(
         "--detection_network",
         type=str,
-        default='standard',
+        default='craft',
         help="Detection networks",
     )
     parser.add_argument(
@@ -96,9 +96,7 @@ def main():
                             recognition=args.recognition,\
                             recognition_network=args.recognition_network,\
                             verbose=args.verbose)
-    for line in SimpleModel.readData(args.file,\
-                                detail=args.detail,\
-                                rotation_info=args.rotation_info):
+    for line in SimpleModel.processFile(args.file):
         print(line)
 
 

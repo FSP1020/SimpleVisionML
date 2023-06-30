@@ -2,7 +2,7 @@
 import os
 import numpy as np
 import cv2
-import imgproc
+import tasks.text_detection.models.CRAFT.imgproc
 
 # borrowed from https://github.com/lengstrom/fast-style-transfer/blob/master/src/utils.py
 def get_files(img_dir):
@@ -42,6 +42,8 @@ def saveResult(img_file, img, boxes, dirname='./result/', verticals=None, texts=
         """
         img = np.array(img)
 
+        print(boxes)
+
         # make result file list
         filename, file_ext = os.path.splitext(os.path.basename(img_file))
 
@@ -59,7 +61,7 @@ def saveResult(img_file, img, boxes, dirname='./result/', verticals=None, texts=
                 f.write(strResult)
 
                 poly = poly.reshape(-1, 2)
-                cv2.polylines(img, [poly.reshape((-1, 1, 2))], True, color=(0, 0, 255), thickness=2)
+                cv2.polylines(img, [poly.reshape((-1, 1, 2))], True, color=(0, 255, 0), thickness=3)
                 ptColor = (0, 255, 255)
                 if verticals is not None:
                     if verticals[i]:
