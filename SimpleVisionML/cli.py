@@ -1,4 +1,7 @@
+# Import neccessary modules
 import argparse
+
+# Import custom file
 import initialize_model
 
 # Get all arguments needed to initialize a model
@@ -39,14 +42,12 @@ def get_model_init_args():
     parser.add_argument(
         "--detection_network",
         type=str,
-        default='standard',
+        default='craft',
         help="Detection networks",
     )
     parser.add_argument(
         "--recognition",
-        type=bool,
-        choices=[True, False],
-        default=True,
+        action="store_true",
         help="Use text recognition",
     )
     parser.add_argument(
@@ -98,11 +99,9 @@ def main():
                             recognition=args.recognition,\
                             recognition_network=args.recognition_network,\
                             verbose=args.verbose)
-    for line in SimpleModel.readData(args.file,\
-                                detail=args.detail,\
-                                rotation_info=args.rotation_info):
-        print(line)
-
+    
+    # Process the given file/files
+    SimpleModel.processFile(args.file)
 
 if __name__ == "__main__":
     main()

@@ -1,9 +1,6 @@
 # Import basic libraries
-import cv2
-import numpy as np
 import torch
 import os
-import sys
 
 # Import other local modules (other files in this package)
 from utils.load_model import *
@@ -17,7 +14,7 @@ LOGGER = getLogger(__name__)
 
 class SimpleModel:
     def __init__(self, use_gpu=True, device=None, model_storage_directory=None, task="text", detection=True, 
-                 detection_network='craft', recognition=True, recognition_network='parseq',
+                 detection_network='craft', recognition=False, recognition_network='parseq',
                  verbose=False):
         """Create a SimpleModel
 
@@ -34,7 +31,7 @@ class SimpleModel:
             detection (bool): Choose to do detection on text (default=True)
             detection_network (str): Choose detection network to use (default=craft)
 
-            recognition (bool): Choose to do recognition on text (default=True)
+            recognition (bool): Choose to do recognition on text (default=False)
             recognition_network (str): Choose recognition network to use (defualt=parseq)
 
             verbose (bool): Show errors and debugging info (default=False)
@@ -52,6 +49,7 @@ class SimpleModel:
                 if verbose:
                     LOGGER.warning('Invalid device given. Choose from "cpu", "cuda", or "mps".\n\
                             Using CPU. Note: This module is much faster with a GPU.')
+                self.device = 'cpu'
         else:
             self.device = 'cpu'
 
@@ -71,6 +69,28 @@ class SimpleModel:
         self.recognition = recognition
         self.recognition_network = recognition_network
 
+        # If we are using detection, load detection model
         if detection:
-            detection_model = load_detection_model(task, detection_network)
+            self.detector = load_detection_model(task, detection_network, self.device, verbose)
 
+        # If we are using recognition, load detection model
+        if recognition:
+            self.recognizer = load_recognition_model(task, recognition_network, verbose)
+
+    # Process file with detection and/or recognition
+    def processFile(self, file):
+        # Check if given file is a directory
+        if not os.path.isfile(file) and os.path.dirname(file):
+            # If it is a directory, get the images in the directory
+            images = os.path.listdir(file)
+            images = [os.path.join(file, image) for image in images if image.lower().endswith(".jpg", ".jpeg", ".png")]
+        else:
+            images = [file]
+
+        all_bboxes = []
+        for image_index, image_filepath in enumerate(images):
+            if self.detection:
+                bboxes = self.detector.process_file(self.detector.model, self.device, image_filepath)
+                all_bboxes.append(bboxes)
+
+        return all_bboxes
