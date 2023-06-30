@@ -1,4 +1,7 @@
+# Import neccessary modules
 import argparse
+
+# Import custom file
 import initialize_model
 
 # Get all arguments needed to initialize a model
@@ -96,9 +99,9 @@ def main():
                             recognition=args.recognition,\
                             recognition_network=args.recognition_network,\
                             verbose=args.verbose)
-    for line in SimpleModel.processFile(args.file):
-        print(line)
-
+    
+    # Process the given file/files
+    SimpleModel.processFile(args.file)
 
 if __name__ == "__main__":
     main()
